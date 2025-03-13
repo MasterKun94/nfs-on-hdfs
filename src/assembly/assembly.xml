@@ -1,0 +1,46 @@
+<assembly>
+    <id>bin</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <lineEnding>unix</lineEnding>
+            <directory>../</directory>
+            <outputDirectory>${dist.name}/</outputDirectory>
+            <!-- 表示的是包含下面格式的资源文件 -->
+            <includes>
+                <include>README.md</include>
+            </includes>
+            <fileMode>0644</fileMode>
+        </fileSet>
+        <fileSet>
+            <lineEnding>unix</lineEnding>
+            <directory>src/conf</directory>
+            <outputDirectory>${dist.name}/conf</outputDirectory>
+            <fileMode>0644</fileMode>
+        </fileSet>
+        <fileSet>
+            <lineEnding>unix</lineEnding>
+            <directory>./</directory>
+            <outputDirectory>${dist.name}/</outputDirectory>
+            <!-- 表示的是包含下面格式的资源文件 -->
+            <includes>
+                <include>README.md</include>
+            </includes>
+            <fileMode>0644</fileMode>
+        </fileSet>
+        <fileSet>
+            <lineEnding>unix</lineEnding>
+            <directory>src/bin</directory>
+            <outputDirectory>${dist.name}/bin</outputDirectory>
+            <fileMode>0755</fileMode>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>${dist.name}/libs</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+</assembly>

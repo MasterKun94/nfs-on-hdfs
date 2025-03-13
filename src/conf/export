@@ -1,0 +1,1 @@
+/ *(rw,insecure,no_root_squash,sec=sys)

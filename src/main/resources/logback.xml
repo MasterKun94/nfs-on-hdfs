@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true" scanPeriod="10 seconds">
+
+    <contextName>logback</contextName>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                ts="%d{ISO8601}" level=%-5level th=%thread logger=%logger msg="%msg"%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <root level="${log.level:-info}">
+        <appender-ref ref="console" />
+    </root>
+
+</configuration>

@@ -1,0 +1,130 @@
+serverName: "nfs-server"
+export: "conf/export"
+rootDir: "/user/admin/share"
+kerberos:
+  dfsEnabled: true
+  dfsPrincipal: "admin/admin@HADOOP.COM"
+  dfsKeytab: "/opt/keytabs/admin.keytab"
+  rpcEnabled: false
+  rpcPrincipal: ""
+  rpcKeytab: ""
+server:
+  port: 2049
+  bind: "0.0.0.0"
+  nfsV3: false
+  nfsV4: true
+  tcp: true
+  udp: false
+  jmx: true
+  autoPublish: true
+  selectorThreadPoolSize: 2
+  workerThreadPoolSize: 5
+  ioStrategy: "SAME_THREAD"
+  subjectPropagation: null
+  memoryAllocator: "DEFAULT"
+vfs:
+  inputStreamCacheSpec: "maximumSize=128,expireAfterAccess=15m"
+  dfsClientCacheSpec: "maximumSize=128,expireAfterAccess=24h"
+  hosted: true
+  idMapping:
+    strategy: FILE
+    file: "conf/id_mapping"
+    reloadInterval: 900000
+  vfsCache:
+    enabled: true
+    fsStatExpireMs: 600000
+    cacheExpireMs: 9000000
+  writeManager:
+    writeHighWatermark: 8388608
+    writeLowWatermark: 4194304
+    writeThreadMaxNum: 100
+    writeThreadInitNum: 10
+    writeWaitTimeoutMs: 30000
+    commitIntervalMs: 1000
+    commitWaitTimeoutMs: 30000
+    autoCommit: false
+    writeCommitPolicy: HFLUSH
+    writeBufferLength: 65536
+prometheus:
+  enabled: true
+  port: 12129
+  threadNum: 3
+sftp:
+  defaultUser: "root"
+  defaultPassword: "lygr@0907"
+  addressInfos: [ ]
+hazelcast:
+  properties:
+    hazelcast.logging.type: "slf4j"
+    hazelcast.slow.operation.detector.threshold.millis: 30000
+  cluster-name: "nfs-server"
+  network:
+    rest-api:
+      enabled: true
+    port:
+      auto-increment: false
+      port: 5701
+    join:
+      tcp-ip:
+        enabled: true
+        member-list:
+          - "10.50.10.105"
+          - "10.50.10.106"
+          - "10.50.10.107"
+      multicast:
+        enabled: false
+      auto-detection:
+        enabled: false
+  serialization:
+    portable-version: 0
+    allow-unsafe: true
+    data-serializable-factories:
+      - factory-id: 131
+        class-name: io.masterkun.nfsonhdfs.cache.DistributedVfsCacheDataSerializableFactory
+  metrics:
+    enabled: true
+    management-center:
+      enabled: true
+      retention-seconds: 5
+    jmx:
+      enabled: true
+    collection-frequency-seconds: 5
+  cache:
+    lookupCache-*:
+      key-type:
+        class-name: io.masterkun.nfsonhdfs.cache.CacheKey
+      value-type:
+        class-name: java.lang.Long
+      statistics-enabled: true
+      management-enabled: true
+      read-through: true
+      write-through: false
+      cache-loader-factory:
+        class-name: io.masterkun.nfsonhdfs.cache.LookupCacheLoaderFactory
+      expiry-policy-factory:
+        class-name: io.masterkun.nfsonhdfs.cache.ExpiryPolicyFactory
+      in-memory-format: BINARY
+      backup-count: 0
+      eviction:
+        size: 4096
+        max-size-policy: ENTRY_COUNT
+        eviction-policy: LFU
+    statCache-*:
+      key-type:
+        class-name: java.lang.Long
+      value-type:
+        class-name: io.masterkun.nfsonhdfs.cache.StatHolder
+      statistics-enabled: true
+      management-enabled: true
+      read-through: true
+      write-through: false
+      cache-loader-factory:
+        class-name: io.masterkun.nfsonhdfs.cache.StatCacheLoaderFactory
+      expiry-policy-factory:
+        class-name: io.masterkun.nfsonhdfs.cache.ExpiryPolicyFactory
+      in-memory-format: BINARY
+      backup-count: 0
+      eviction:
+        size: 4096
+        max-size-policy: ENTRY_COUNT
+        eviction-policy: LFU

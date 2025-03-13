@@ -1,0 +1,12 @@
+stream {
+    upstream nfs_server {
+        hash $remote_addr;
+        server 10.50.30.126:2049  max_fails=1 fail_timeout=20s;     #这里配置成要访问的地址
+        server 10.50.30.127:2049  max_fails=1 fail_timeout=20s;
+    }
+    server {
+        listen 2050;               #需要监听的端口
+        proxy_timeout 20s;
+        proxy_pass nfs_server;
+    }
+}
