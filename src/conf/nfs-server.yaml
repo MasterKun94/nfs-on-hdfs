@@ -25,7 +25,7 @@ server:
 vfs:
   inputStreamCacheSpec: "maximumSize=128,expireAfterAccess=15m"
   dfsClientCacheSpec: "maximumSize=128,expireAfterAccess=24h"
-  hosted: true
+  hosted: false
   idMapping:
     strategy: FILE
     file: "conf/id_mapping"
@@ -69,8 +69,8 @@ hazelcast:
         enabled: true
         member-list:
           - "10.50.10.105"
-          - "10.50.10.106"
-          - "10.50.10.107"
+#          - "10.50.10.106"
+#          - "10.50.10.107"
       multicast:
         enabled: false
       auto-detection:

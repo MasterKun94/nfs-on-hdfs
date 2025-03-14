@@ -1,8 +1,11 @@
+serverName: "nfs-server"
+export: "src/test/resources/export"
+rootDir: "/user/admin/share"
 kerberos:
   dfsEnabled: true
   dfsPrincipal: "admin/admin@HADOOP.COM"
-  dfsKeytab: "/root/admin.keytab"
-  rpcEnabled: true
+  dfsKeytab: "src/test/resources/admin.keytab"
+  rpcEnabled: false
   rpcPrincipal: "admin/admin@HADOOP.COM"
   rpcKeytab: "/root/admin.keytab"
 server:
@@ -22,6 +25,9 @@ server:
 vfs:
   inputStreamCacheSpec: "maximumSize=128,expireAfterAccess=15m"
   dfsClientCacheSpec: "maximumSize=128,expireAfterAccess=24h"
+  hosted: false
+  idMapping:
+    strategy: TEST
   vfsCache:
     enabled: true
     cacheExpireMs: 900000
