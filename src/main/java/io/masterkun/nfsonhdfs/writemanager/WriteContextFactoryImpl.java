@@ -30,7 +30,8 @@ public class WriteContextFactoryImpl implements WriteContextFactory {
     }
 
     @Override
-    public long create(long parentFileId, String name, FsPermission permission, DfsClientCache dfsClientCache) throws IOException {
+    public long create(long parentFileId, String name, FsPermission permission,
+                       DfsClientCache dfsClientCache) throws IOException {
         DFSClient dfsClient = dfsClientCache.getDFSClient();
         DfsClientConf conf = dfsClient.getConf();
         int bufferSize = conf.getIoBufferSize();
@@ -50,7 +51,8 @@ public class WriteContextFactoryImpl implements WriteContextFactory {
                     bufferSize,
                     null);
             FileHandle fileHandle = CallContext.getFileHandle(out.getFileId());
-            WriteContext context = WriteContextImpl.get(fileHandle, dfsClient, dfsClient.createWrappedOutputStream(out, null), this);
+            WriteContext context = WriteContextImpl.get(fileHandle, dfsClient,
+                    dfsClient.createWrappedOutputStream(out, null), this);
             LOG.info("{} created", context);
             CACHE.put(fileHandle, context);
             return fileHandle.fileId();
@@ -87,7 +89,8 @@ public class WriteContextFactoryImpl implements WriteContextFactory {
                             null,
                             null
                     );
-                    WriteContextImpl ctx = WriteContextImpl.get(key, clientCache.getDFSClient(key.principal()), out, this);
+                    WriteContextImpl ctx = WriteContextImpl.get(key,
+                            clientCache.getDFSClient(key.principal()), out, this);
                     LOG.info("{} created for append", ctx);
                     return ctx;
                 } catch (IOException e) {

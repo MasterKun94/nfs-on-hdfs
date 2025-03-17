@@ -8,6 +8,7 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.InMemoryYamlConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.typesafe.config.ConfigFactory;
 import io.masterkun.nfsonhdfs.cache.CacheLoaderHelper;
 import io.masterkun.nfsonhdfs.cache.DistributedVfsCache;
 import io.masterkun.nfsonhdfs.idmapping.AbstractIdMapping;
@@ -21,7 +22,6 @@ import io.masterkun.nfsonhdfs.util.memory.CustomPooledMemoryManagerFactory;
 import io.masterkun.nfsonhdfs.vfs.HadoopVirtualFileSystem;
 import io.masterkun.nfsonhdfs.vfs.HostedVirtualFileSystem;
 import io.masterkun.nfsonhdfs.vfs.WrappedVirtualFileSystem;
-import com.typesafe.config.ConfigFactory;
 import io.prometheus.client.exporter.HTTPServer;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -74,7 +74,8 @@ public class RealServerStarter {
 
     private static void start(String[] args) throws Exception {
         if (System.getProperty(DefaultMemoryManagerFactory.DMMF_PROP_NAME) == null) {
-            System.setProperty(DefaultMemoryManagerFactory.DMMF_PROP_NAME, CustomPooledMemoryManagerFactory.class.getName());
+            System.setProperty(DefaultMemoryManagerFactory.DMMF_PROP_NAME,
+                    CustomPooledMemoryManagerFactory.class.getName());
         }
         AppConfig appConfig;
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
@@ -124,7 +125,8 @@ public class RealServerStarter {
                     .withPort(prometheusConfig.getPort())
                     .withDaemonThreads(true);
             if (prometheusConfig.getThreadNum() > 0) {
-                ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(prometheusConfig.getThreadNum(), new ThreadFactoryBuilder()
+                ThreadPoolExecutor executor =
+                        (ThreadPoolExecutor) Executors.newFixedThreadPool(prometheusConfig.getThreadNum(), new ThreadFactoryBuilder()
                         .setDaemon(true)
                         .setNameFormat("metrics-server-%d")
                         .build());
@@ -212,7 +214,8 @@ public class RealServerStarter {
         }
         if (serverConf.getSubjectPropagation() != null) {
             LOG.info("Set subject_propagation={}", serverConf.getSubjectPropagation());
-            builder = serverConf.getSubjectPropagation() ? builder.withSubjectPropagation() : builder.withoutSubjectPropagation();
+            builder = serverConf.getSubjectPropagation() ? builder.withSubjectPropagation() :
+                    builder.withoutSubjectPropagation();
         }
         if (serverConf.getMemoryAllocator() != null) {
             LOG.info("Set memory_allocator={}", serverConf.getMemoryAllocator());
@@ -248,7 +251,8 @@ public class RealServerStarter {
             NFSServerV41 nfs4 = new NFSServerV41.Builder()
                     .withExportTable(exportFile)
                     .withVfs(vfs)
-                    .withLockManager(new DistributedLockManager(hazelcastInstance, appConfig.getServerName() + "_DLM"))
+                    .withLockManager(new DistributedLockManager(hazelcastInstance,
+                            appConfig.getServerName() + "_DLM"))
                     .withOperationExecutor(new MDSOperationExecutor() {
                         @Override
                         public nfs_resop4 execute(CompoundContext context, nfs_argop4 args) throws IOException {

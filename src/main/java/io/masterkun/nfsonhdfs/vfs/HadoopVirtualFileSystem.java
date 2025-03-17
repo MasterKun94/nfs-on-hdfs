@@ -166,7 +166,8 @@ public class HadoopVirtualFileSystem implements VirtualFileSystem, CacheLoaderHe
 
     private DirectoryEntry buildDirectoryEntry(HdfsFileStatus status, long currentCookie) throws IOException {
         Inode inode = Utils.getInode(status.getFileId());
-        return new DirectoryEntry(status.getLocalName(), inode, this.getStatHolder(status).getStatNotCreate(), currentCookie);
+        return new DirectoryEntry(status.getLocalName(), inode,
+                this.getStatHolder(status).getStatNotCreate(), currentCookie);
     }
 
     @VisibleForTesting
@@ -182,7 +183,8 @@ public class HadoopVirtualFileSystem implements VirtualFileSystem, CacheLoaderHe
         stat.setRdev(0);
         stat.setSize(status.isDirectory() ? (status.getChildrenNum() + 2) * 32L : status.getLen());
         stat.setGeneration(status.getModificationTime());
-        stat.setATime(status.getAccessTime() == 0 ? status.getModificationTime() : status.getAccessTime());
+        stat.setATime(status.getAccessTime() == 0 ? status.getModificationTime() :
+                status.getAccessTime());
         stat.setMTime(status.getModificationTime());
         stat.setCTime(status.getModificationTime());
         return new StatHolder(stat);
@@ -232,7 +234,8 @@ public class HadoopVirtualFileSystem implements VirtualFileSystem, CacheLoaderHe
         long currentParentFileId = Utils.getFileId(src);
         long destFileId = Utils.getFileId(dest);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("vfs.move(src={}, oldName={}, desc={}, newName={})", currentParentFileId, oldName, destFileId, newName);
+            LOG.debug("vfs.move(src={}, oldName={}, desc={}, newName={})", currentParentFileId,
+                    oldName, destFileId, newName);
         }
         String currenFileIdPath = Utils.getFileIdPath(currentParentFileId, oldName);
         String newFileIdPath = Utils.getFileIdPath(destFileId, newName);
@@ -255,7 +258,8 @@ public class HadoopVirtualFileSystem implements VirtualFileSystem, CacheLoaderHe
     public int read(Inode inode, byte[] data, long offset, int count) throws IOException {
         long fileId = Utils.getFileId(inode);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("vfs.read(inode={}, data=byte[], offset={}, count={})", fileId, offset, count);
+            LOG.debug("vfs.read(inode={}, data=byte[], offset={}, count={})", fileId, offset,
+                    count);
         }
         DFSInputStream open = dfsClientCache.getDfsInputStream(fileId);
         int read = open.getPos() == offset ?
@@ -287,20 +291,24 @@ public class HadoopVirtualFileSystem implements VirtualFileSystem, CacheLoaderHe
     }
 
     @Override
-    public WriteResult write(Inode inode, byte[] data, long offset, int count, StabilityLevel stabilityLevel) throws IOException {
+    public WriteResult write(Inode inode, byte[] data, long offset, int count,
+                             StabilityLevel stabilityLevel) throws IOException {
         long fileId = Utils.getFileId(inode);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("vfs.write(inode={}, data=byte[], offset={}, count={}, stabilityLevel={})", fileId, offset, count, stabilityLevel);
+            LOG.debug("vfs.write(inode={}, data=byte[], offset={}, count={}, stabilityLevel={})",
+                    fileId, offset, count, stabilityLevel);
         }
         writeManager.handleWrite(fileId, data, offset, count);
         return new WriteResult(StabilityLevel.UNSTABLE, count);
     }
 
     @Override
-    public WriteResult write(Inode inode, ByteBuffer data, long offset, StabilityLevel stabilityLevel) throws IOException {
+    public WriteResult write(Inode inode, ByteBuffer data, long offset,
+                             StabilityLevel stabilityLevel) throws IOException {
         long fileId = Utils.getFileId(inode);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("vfs.write(inode={}, data={}, offset={}, stabilityLevel={})", fileId, data, offset, stabilityLevel);
+            LOG.debug("vfs.write(inode={}, data={}, offset={}, stabilityLevel={})", fileId, data,
+                    offset, stabilityLevel);
         }
         int count = data.remaining();
         writeManager.handleWrite(fileId, data, offset);
@@ -474,7 +482,8 @@ public class HadoopVirtualFileSystem implements VirtualFileSystem, CacheLoaderHe
         }
         if (update) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("vfs.applyStatToPath(inode={}, mtime={}, atime={})", fileId, modificationTime, accessTime);
+                LOG.debug("vfs.applyStatToPath(inode={}, mtime={}, atime={})", fileId,
+                        modificationTime, accessTime);
             }
             dfsClient.setTimes(fileIdPath, modificationTime, accessTime);
         }
@@ -549,7 +558,8 @@ public class HadoopVirtualFileSystem implements VirtualFileSystem, CacheLoaderHe
     public void setXattr(Inode inode, String attr, byte[] value, SetXattrMode mode) throws IOException {
         long fileId = Utils.getFileId(inode);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("vfs.setXattr(inode={}, attr={}, value={}, mode={})", fileId, attr, value, mode);
+            LOG.debug("vfs.setXattr(inode={}, attr={}, value={}, mode={})", fileId, attr, value,
+                    mode);
         }
         EnumSet<XAttrSetFlag> flags = switch (mode) {
             case CREATE -> EnumSet.of(XAttrSetFlag.CREATE);
@@ -598,7 +608,8 @@ public class HadoopVirtualFileSystem implements VirtualFileSystem, CacheLoaderHe
             LOG.debug("clh.getStat(inode={})", fileId);
         }
         String fileIdPath = Utils.getFileIdPath(fileId);
-        final HdfsFileStatus fileInfo = dfsClientCache.getSuperUserDFSClient().getFileInfo(fileIdPath);
+        final HdfsFileStatus fileInfo =
+                dfsClientCache.getSuperUserDFSClient().getFileInfo(fileIdPath);
         return fileInfo == null ? null : getStatHolder(fileInfo);
     }
 }

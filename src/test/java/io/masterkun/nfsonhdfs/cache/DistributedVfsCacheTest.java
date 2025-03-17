@@ -43,9 +43,12 @@ public class DistributedVfsCacheTest {
     @BeforeClass
     public static void init() throws Exception {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        AppConfig appConfig = mapper.readValue(new File("src/test/resources/nfs-server.yaml"), AppConfig.class);
+        AppConfig appConfig = mapper.readValue(new File("src/test/resources/nfs-server.yaml"),
+                AppConfig.class);
         Utils.init(appConfig);
-        Config config = new InMemoryYamlConfig(mapper.writeValueAsString(Collections.singletonMap("hazelcast", appConfig.getHazelcast())));
+        Config config =
+                new InMemoryYamlConfig(mapper.writeValueAsString(Collections.singletonMap(
+                        "hazelcast", appConfig.getHazelcast())));
         hazelcastInstance = Hazelcast.newHazelcastInstance(config);
         adder = new AtomicLong();
     }
@@ -55,7 +58,8 @@ public class DistributedVfsCacheTest {
         vfs = spy(new DummyVFS());
         Utils.init((CacheLoaderHelper) vfs);
         root = vfs.getRootInode();
-        vfsCache = new DistributedVfsCache(vfs, hazelcastInstance, Long.toString(adder.incrementAndGet()));
+        vfsCache = new DistributedVfsCache(vfs, hazelcastInstance,
+                Long.toString(adder.incrementAndGet()));
     }
 
     @After

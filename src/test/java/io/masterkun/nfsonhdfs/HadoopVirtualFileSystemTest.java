@@ -1,12 +1,12 @@
 package io.masterkun.nfsonhdfs;
 
+import com.sun.security.auth.UnixNumericGroupPrincipal;
+import com.sun.security.auth.UnixNumericUserPrincipal;
 import io.masterkun.nfsonhdfs.util.AppConfig;
 import io.masterkun.nfsonhdfs.util.Utils;
 import io.masterkun.nfsonhdfs.vfs.DfsClientCache;
 import io.masterkun.nfsonhdfs.vfs.DfsClientCacheImpl;
 import io.masterkun.nfsonhdfs.vfs.HadoopVirtualFileSystem;
-import com.sun.security.auth.UnixNumericGroupPrincipal;
-import com.sun.security.auth.UnixNumericUserPrincipal;
 import org.apache.hadoop.hdfs.DFSClient;
 import org.apache.hadoop.hdfs.protocol.HdfsFileStatus;
 import org.dcache.nfs.v4.NfsIdMapping;

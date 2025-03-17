@@ -12,12 +12,14 @@ import java.lang.invoke.VarHandle;
 import java.nio.ByteBuffer;
 
 public final class ByteBufferPendingWrite implements PendingWrite {
-    private static final DirectByteBufferPool BYTE_BUFFER_POOL = CustomPooledMemoryManagerFactory.BYTE_BUFFER_POOL;
+    private static final DirectByteBufferPool BYTE_BUFFER_POOL =
+            CustomPooledMemoryManagerFactory.BYTE_BUFFER_POOL;
     private static final int BYTES_TL_LEN = Utils.getServerConfig()
             .getVfs()
             .getWriteManager()
             .getWriteBufferLength();
-    private static final ThreadLocal<byte[]> BYTES_TL = ThreadLocal.withInitial(() -> new byte[BYTES_TL_LEN]);
+    private static final ThreadLocal<byte[]> BYTES_TL =
+            ThreadLocal.withInitial(() -> new byte[BYTES_TL_LEN]);
     private static final VarHandle VALUE;
 
     static {
@@ -83,7 +85,8 @@ public final class ByteBufferPendingWrite implements PendingWrite {
         int read = in.read(offset, buffer);
         buffer.flip();
         if (read < count) {
-            throw new IllegalArgumentException("bytes read " + read + " is less than write count " + count);
+            throw new IllegalArgumentException("bytes read " + read + " is less than write count "
+                    + count);
         }
         final int mismatch = data.mismatch(buffer);
         return mismatch == -1 || mismatch >= count;

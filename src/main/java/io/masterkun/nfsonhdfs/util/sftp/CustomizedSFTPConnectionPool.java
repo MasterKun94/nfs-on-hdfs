@@ -17,9 +17,7 @@ import java.io.IOException;
 import java.time.Duration;
 
 /**
- * @author chenmingkun
- * date    2022/10/31
- * version 1.0
+ * @author chenmingkun date    2022/10/31 version 1.0
  */
 public class CustomizedSFTPConnectionPool implements SFTPConnectionPool {
 

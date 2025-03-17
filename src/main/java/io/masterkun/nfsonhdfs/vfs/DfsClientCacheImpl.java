@@ -31,7 +31,8 @@ public class DfsClientCacheImpl implements DfsClientCache {
         );
     }
 
-    public DfsClientCacheImpl(String rootPath, String dfsClientCacheSpec, String inputStreamCacheSpec) throws IOException {
+    public DfsClientCacheImpl(String rootPath, String dfsClientCacheSpec,
+                              String inputStreamCacheSpec) throws IOException {
         URI resolvedURI = Utils.getResolvedURI(rootPath);
         this.dfsClientCache = Caffeine.from(dfsClientCacheSpec)
                 .removalListener((RemovalListener<String, DFSClient>) (key, value, cause) -> {
@@ -48,7 +49,9 @@ public class DfsClientCacheImpl implements DfsClientCache {
                 .build(new CacheLoader<String, DFSClient>() {
                     @Override
                     public @Nullable DFSClient load(String principal) throws Exception {
-                        UserGroupInformation proxyUser = UserGroupInformation.createProxyUser(principal, UserGroupInformation.getCurrentUser());
+                        UserGroupInformation proxyUser =
+                                UserGroupInformation.createProxyUser(principal,
+                                        UserGroupInformation.getCurrentUser());
                         return proxyUser.doAs((PrivilegedExceptionAction<DFSClient>) () -> new DFSClient(resolvedURI, Utils.getHadoopConf()));
                     }
                 });

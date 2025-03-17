@@ -1,8 +1,5 @@
 package io.masterkun.nfsonhdfs;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 public class NfsServerAppStarterTest {
 
     public static void main(String[] args) {

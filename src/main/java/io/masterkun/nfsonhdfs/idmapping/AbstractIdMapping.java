@@ -39,7 +39,8 @@ public abstract class AbstractIdMapping implements NfsIdMapping {
         }
     }
 
-    protected abstract void doReload(BiMap<String, Integer> userUidMap, BiMap<String, Integer> groupGidMap) throws Exception;
+    protected abstract void doReload(BiMap<String, Integer> userUidMap,
+                                     BiMap<String, Integer> groupGidMap) throws Exception;
 
     public void reload() throws Exception {
         BiMap<String, Integer> userUidBiMap = HashBiMap.create();

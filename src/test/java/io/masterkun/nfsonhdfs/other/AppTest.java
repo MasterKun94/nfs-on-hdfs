@@ -5,7 +5,8 @@ import java.net.InetAddress;
 public class AppTest {
 
     public static void main(String[] args) throws Exception {
-//        CustomPooledMemoryManagerFactory.CustomizedMemoryManager manager = new CustomPooledMemoryManagerFactory.CustomizedMemoryManager(true);
+//        CustomPooledMemoryManagerFactory.CustomizedMemoryManager manager = new
+//        CustomPooledMemoryManagerFactory.CustomizedMemoryManager(true);
 //        final Buffer allocate = manager.allocate(1048376);
 //        final Buffer allocate2 = manager.allocate(4096);
 //        final ByteBuffer byteBuffer = allocate.toByteBuffer();

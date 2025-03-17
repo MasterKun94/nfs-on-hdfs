@@ -24,11 +24,13 @@ public class ClientSftpIdMappingFactory implements IdMappingFactory {
         }
         return mappings.computeIfAbsent(clientAddress, k -> {
             AppConfig.SftpConfig sftp = Utils.getServerConfig().getSftp();
-            long reloadInterval = Utils.getServerConfig().getVfs().getIdMapping().getReloadInterval();
+            long reloadInterval =
+                    Utils.getServerConfig().getVfs().getIdMapping().getReloadInterval();
             for (AppConfig.SftpAddressInfo addressInfo : sftp.getAddressInfos()) {
                 WildcardConfigPatternMatcher matcher = new WildcardConfigPatternMatcher();
                 String host = addressInfo.getHost();
-                if (matcher.matches(host, k.getHostName()) || matcher.matches(host, k.getHostAddress())) {
+                if (matcher.matches(host, k.getHostName()) || matcher.matches(host,
+                        k.getHostAddress())) {
                     LOG.info("Create IdMapping for address: {}", k);
                     return new ClientSftpIdMapping(
                             k.getHostAddress(),
@@ -48,7 +50,8 @@ public class ClientSftpIdMappingFactory implements IdMappingFactory {
                         reloadInterval
                 );
             } catch (Exception e) {
-                LOG.info("IdMapping for address: {} not found, fallback to LocalShellIdMapping", k, e);
+                LOG.info("IdMapping for address: {} not found, fallback to LocalShellIdMapping",
+                        k, e);
                 return LocalShellIdMappingFactory.MAPPING;
             }
         });

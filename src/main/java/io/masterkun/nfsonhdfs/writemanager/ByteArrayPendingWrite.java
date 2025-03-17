@@ -41,7 +41,8 @@ public final class ByteArrayPendingWrite implements PendingWrite {
         byte[] readData = new byte[count];
         int read = in.read(offset, readData, 0, count);
         if (read < count) {
-            throw new IllegalArgumentException("bytes read " + read + " is less than write count " + count);
+            throw new IllegalArgumentException("bytes read " + read + " is less than write count "
+                    + count);
         }
         return Arrays.equals(bytes, 0, count, readData, 0, count);
     }

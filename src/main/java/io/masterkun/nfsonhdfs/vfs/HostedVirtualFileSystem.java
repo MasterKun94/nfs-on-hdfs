@@ -1,6 +1,7 @@
 package io.masterkun.nfsonhdfs.vfs;
 
 import com.google.common.primitives.Longs;
+import com.sun.security.auth.UnixNumericUserPrincipal;
 import io.masterkun.nfsonhdfs.CallContext;
 import io.masterkun.nfsonhdfs.cache.CacheLoaderHelper;
 import io.masterkun.nfsonhdfs.cache.StatHolder;
@@ -9,7 +10,6 @@ import io.masterkun.nfsonhdfs.idmapping.HostedSftpIdMapping;
 import io.masterkun.nfsonhdfs.idmapping.HostedSftpIdMappingFactory;
 import io.masterkun.nfsonhdfs.util.Constants;
 import io.masterkun.nfsonhdfs.util.Utils;
-import com.sun.security.auth.UnixNumericUserPrincipal;
 import lombok.SneakyThrows;
 import org.agrona.collections.Int2ObjectHashMap;
 import org.agrona.collections.LongHashSet;
@@ -89,7 +89,8 @@ public class HostedVirtualFileSystem implements VirtualFileSystem {
         this.exportIdxInodes = exportIdxInodes;
         this.exportIdxHosts = exportIdxHosts;
         this.hostedFileIds = hostedFileIds;
-        this.idMappingFactory = new HostedSftpIdMappingFactory((AbstractIdMapping) Utils.getNfsIdMapping());
+        this.idMappingFactory =
+                new HostedSftpIdMappingFactory((AbstractIdMapping) Utils.getNfsIdMapping());
     }
 
     private boolean isRootInode(Inode inode) {
@@ -200,7 +201,8 @@ public class HostedVirtualFileSystem implements VirtualFileSystem {
                 if (currentCookie >= cookie) {
                     Stat stat = statHolder.newStat();
                     stat.setIno(fileId);
-                    set.add(new DirectoryEntry(entry.getKey(), entry.getValue(), stat, currentCookie));
+                    set.add(new DirectoryEntry(entry.getKey(), entry.getValue(), stat,
+                            currentCookie));
                 }
                 currentCookie++;
             }
@@ -351,7 +353,8 @@ public class HostedVirtualFileSystem implements VirtualFileSystem {
     }
 
     @Override
-    public WriteResult write(Inode inode, byte[] data, long offset, int count, StabilityLevel stabilityLevel) throws IOException {
+    public WriteResult write(Inode inode, byte[] data, long offset, int count,
+                             StabilityLevel stabilityLevel) throws IOException {
         try {
             resolvePrincipal();
             return inner.write(inode, data, offset, count, stabilityLevel);
@@ -361,7 +364,8 @@ public class HostedVirtualFileSystem implements VirtualFileSystem {
     }
 
     @Override
-    public WriteResult write(Inode inode, ByteBuffer data, long offset, StabilityLevel stabilityLevel) throws IOException {
+    public WriteResult write(Inode inode, ByteBuffer data, long offset,
+                             StabilityLevel stabilityLevel) throws IOException {
         try {
             resolvePrincipal();
             return inner.write(inode, data, offset, stabilityLevel);

@@ -21,14 +21,15 @@ public class HostedSftpIdMapping extends AbstractIdMapping {
     private final Path groupPath;
     private final String address;
     private final AbstractIdMapping innerMapping;
-    private volatile Int2ObjectHashMap<String> uidRealUserMap;
     private final JSch jsch = new JSch();
     private final String host;
     private final int port;
     private final String user;
     private final String password;
+    private volatile Int2ObjectHashMap<String> uidRealUserMap;
 
-    public HostedSftpIdMapping(AbstractIdMapping innerMapping, String host, int port, String user, String password, long reloadInterval) {
+    public HostedSftpIdMapping(AbstractIdMapping innerMapping, String host, int port, String user
+            , String password, long reloadInterval) {
         super(reloadInterval);
         this.address = port == -1 ? host : host + ":" + port;
         this.innerMapping = innerMapping;
@@ -51,7 +52,8 @@ public class HostedSftpIdMapping extends AbstractIdMapping {
     }
 
     @Override
-    protected void doReload(BiMap<String, Integer> userUidMap, BiMap<String, Integer> groupGidMap) throws IOException {
+    protected void doReload(BiMap<String, Integer> userUidMap,
+                            BiMap<String, Integer> groupGidMap) throws IOException {
         Session session = null;
         ChannelSftp channel = null;
         try {

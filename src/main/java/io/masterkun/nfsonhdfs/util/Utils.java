@@ -44,6 +44,7 @@ public class Utils {
     private static final Configuration hadoopConf;
     private static AppConfig appConfig;
     private static IdMappingFactory idMappingFactory;
+    private static boolean initialized = false;
 
     static {
         hadoopConf = new Configuration();
@@ -147,8 +148,6 @@ public class Utils {
     public static String getFileIdPath(long parentId, String fileName) {
         return INODEID_PATH_PREFIX + parentId + "/" + fileName;
     }
-
-    private static boolean initialized = false;
 
     public static synchronized void initializeMetricsExport() {
         if (!initialized) {

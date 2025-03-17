@@ -17,7 +17,8 @@ public class ClientSftpIdMapping extends AbstractIdMapping {
     private final Path groupPath;
     private final String address;
 
-    public ClientSftpIdMapping(String host, int port, String user, String password, long reloadInterval) {
+    public ClientSftpIdMapping(String host, int port, String user, String password,
+                               long reloadInterval) {
         super(reloadInterval);
         this.address = port == -1 ? host : host + ":" + port;
         URI uri;
@@ -44,8 +45,10 @@ public class ClientSftpIdMapping extends AbstractIdMapping {
     }
 
     @Override
-    protected void doReload(BiMap<String, Integer> userUidMap, BiMap<String, Integer> groupGidMap) throws IOException {
-        try (InputStream passwd = passwdPath.getFileSystem(Utils.getHadoopConf()).open(passwdPath)) {
+    protected void doReload(BiMap<String, Integer> userUidMap,
+                            BiMap<String, Integer> groupGidMap) throws IOException {
+        try (InputStream passwd =
+                     passwdPath.getFileSystem(Utils.getHadoopConf()).open(passwdPath)) {
             for (String readLine : IOUtils.readLines(passwd, StandardCharsets.UTF_8)) {
                 String[] split = readLine.split(":");
                 if (split[split.length - 1].equals("/bin/bash")) {

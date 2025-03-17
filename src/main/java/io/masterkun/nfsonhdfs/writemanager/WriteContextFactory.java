@@ -7,7 +7,8 @@ import org.apache.hadoop.fs.permission.FsPermission;
 import java.io.IOException;
 
 public interface WriteContextFactory {
-    long create(long parentFileId, String name, FsPermission permission, DfsClientCache dfsClientCache) throws IOException;
+    long create(long parentFileId, String name, FsPermission permission,
+                DfsClientCache dfsClientCache) throws IOException;
 
     WriteContext cacheGetOption(FileHandle handle);
 

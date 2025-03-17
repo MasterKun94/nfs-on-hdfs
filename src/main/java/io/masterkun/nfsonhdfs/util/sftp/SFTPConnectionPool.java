@@ -5,9 +5,7 @@ import com.jcraft.jsch.ChannelSftp;
 import java.io.IOException;
 
 /**
- * @author chenmingkun
- * date    2022/10/31
- * version 1.0
+ * @author chenmingkun date    2022/10/31 version 1.0
  */
 public interface SFTPConnectionPool {
 
@@ -20,8 +18,8 @@ public interface SFTPConnectionPool {
 
 
     /**
-     * Class to capture the minimal set of information that distinguish
-     * between different connections.
+     * Class to capture the minimal set of information that distinguish between different
+     * connections.
      */
     class ConnectionInfo {
         private final String host;

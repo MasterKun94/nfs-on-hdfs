@@ -69,8 +69,8 @@ hazelcast:
         enabled: true
         member-list:
           - "10.50.10.105"
-#          - "10.50.10.106"
-#          - "10.50.10.107"
+      #          - "10.50.10.106"
+      #          - "10.50.10.107"
       multicast:
         enabled: false
       auto-detection:

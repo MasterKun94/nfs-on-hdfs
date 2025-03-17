@@ -173,7 +173,8 @@ public class WrappedVirtualFileSystem implements VirtualFileSystem, CacheLoaderH
 
     @SuppressWarnings("all")
     @Override
-    public WriteResult write(Inode inode, byte[] data, long offset, int count, StabilityLevel stabilityLevel) throws IOException {
+    public WriteResult write(Inode inode, byte[] data, long offset, int count,
+                             StabilityLevel stabilityLevel) throws IOException {
         try {
             return inner.write(inode, data, offset, count, stabilityLevel);
         } catch (Exception e) {
@@ -182,7 +183,8 @@ public class WrappedVirtualFileSystem implements VirtualFileSystem, CacheLoaderH
     }
 
     @Override
-    public WriteResult write(Inode inode, ByteBuffer data, long offset, StabilityLevel stabilityLevel) throws IOException {
+    public WriteResult write(Inode inode, ByteBuffer data, long offset,
+                             StabilityLevel stabilityLevel) throws IOException {
         try {
             return inner.write(inode, data, offset, stabilityLevel);
         } catch (Exception e) {
@@ -218,7 +220,8 @@ public class WrappedVirtualFileSystem implements VirtualFileSystem, CacheLoaderH
     }
 
     @Override
-    public Inode symlink(Inode parent, String linkName, String targetName, Subject subject, int mode) throws IOException {
+    public Inode symlink(Inode parent, String linkName, String targetName, Subject subject,
+                         int mode) throws IOException {
         try {
             return inner.symlink(parent, linkName, targetName, subject, mode);
         } catch (Exception e) {
@@ -329,7 +332,8 @@ public class WrappedVirtualFileSystem implements VirtualFileSystem, CacheLoaderH
 
     @SuppressWarnings("all")
     @Override
-    public CompletableFuture<Long> copyFileRange(Inode src, long srcPos, Inode dst, long dstPos, long len) {
+    public CompletableFuture<Long> copyFileRange(Inode src, long srcPos, Inode dst, long dstPos,
+                                                 long len) {
         return inner.copyFileRange(src, srcPos, dst, dstPos, len);
     }
 

@@ -13,7 +13,8 @@ import java.nio.ByteBuffer;
 public class CustomPooledMemoryManagerFactory implements DefaultMemoryManagerFactory {
 
     public static final DirectByteBufferPool BYTE_BUFFER_POOL = new DirectByteBufferPool();
-    private static final Logger LOG = LoggerFactory.getLogger(CustomPooledMemoryManagerFactory.class);
+    private static final Logger LOG =
+            LoggerFactory.getLogger(CustomPooledMemoryManagerFactory.class);
 
     public CustomPooledMemoryManagerFactory() {
         LOG.info("Init CustomPooledMemoryManagerFactory");
@@ -45,8 +46,11 @@ public class CustomPooledMemoryManagerFactory implements DefaultMemoryManagerFac
             direct = isDirect;
         }
 
-        public CustomizedMemoryManager(int baseBufferSize, int numberOfPools, int growthFactor, int numberOfPoolSlices, float percentOfHeap, float percentPreallocated, boolean isDirect) {
-            super(baseBufferSize, numberOfPools, growthFactor, numberOfPoolSlices, percentOfHeap, percentPreallocated, isDirect);
+        public CustomizedMemoryManager(int baseBufferSize, int numberOfPools, int growthFactor,
+                                       int numberOfPoolSlices, float percentOfHeap,
+                                       float percentPreallocated, boolean isDirect) {
+            super(baseBufferSize, numberOfPools, growthFactor, numberOfPoolSlices, percentOfHeap,
+                    percentPreallocated, isDirect);
             direct = isDirect;
         }
 

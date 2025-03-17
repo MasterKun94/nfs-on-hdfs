@@ -34,7 +34,8 @@ public class DistributedVfsCache extends ForwardingFileSystem implements CacheLo
     private volatile FsStat cachedFsStat;
     private volatile long fsStatRefreshTime;
 
-    public DistributedVfsCache(VirtualFileSystem inner, HazelcastInstance hazelcastInstance, String suffix) {
+    public DistributedVfsCache(VirtualFileSystem inner, HazelcastInstance hazelcastInstance,
+                               String suffix) {
         this.inner = inner;
         final AppConfig.VfsCacheConfig cacheConfig = Utils.getServerConfig().getVfs().getVfsCache();
         this.fsStatExpireMs = cacheConfig.getFsStatExpireMs();
@@ -201,7 +202,8 @@ public class DistributedVfsCache extends ForwardingFileSystem implements CacheLo
 
     public CompletableFuture<Boolean> invalidateParentCache(Inode child) {
         long childFileId = Utils.getFileId(child);
-        return (CompletableFuture<Boolean>) lookupCache.removeAsync(new CacheKey(childFileId, ".."));
+        return (CompletableFuture<Boolean>) lookupCache.removeAsync(new CacheKey(childFileId, "." +
+                "."));
     }
 
     /**

@@ -24,7 +24,8 @@ public class FileIdMapping extends AbstractIdMapping {
     }
 
     @Override
-    protected void doReload(BiMap<String, Integer> userUidMap, BiMap<String, Integer> groupGidMap) throws Exception {
+    protected void doReload(BiMap<String, Integer> userUidMap,
+                            BiMap<String, Integer> groupGidMap) throws Exception {
         try (InputStream stream = Files.newInputStream(idMappingPath)) {
             List<String> lines = IOUtils.readLines(stream, StandardCharsets.UTF_8);
             Splitter splitter = Splitter.on(",").trimResults();
@@ -58,7 +59,8 @@ public class FileIdMapping extends AbstractIdMapping {
                     Integer oldVal = switch (c) {
                         case 'u' -> userUidMap.put(principal, uid);
                         case 'g' -> groupGidMap.put(principal, uid);
-                        default -> throw new IllegalArgumentException("illegal id_mapping line [" + line + "]");
+                        default ->
+                                throw new IllegalArgumentException("illegal id_mapping line [" + line + "]");
                     };
                     if (oldVal != null) {
                         throw new IllegalArgumentException("duplicate element in line [" + line + "]");

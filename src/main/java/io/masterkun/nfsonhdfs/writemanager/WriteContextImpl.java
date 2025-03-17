@@ -52,9 +52,11 @@ public class WriteContextImpl implements WriteContext, StringBuilderFormattable 
             TimeUnit.HOURS,
             new ArrayBlockingQueue<>(10)
     );
-    private static final ThreadLocal<Queue<PendingAction>> PENDING_ACTION_TL = ThreadLocal.withInitial(
+    private static final ThreadLocal<Queue<PendingAction>> PENDING_ACTION_TL =
+            ThreadLocal.withInitial(
             () -> new ManyToOneConcurrentArrayQueue<>(128));
-    private static final ThreadLocal<Queue<PendingAction>> UNORDERED_ACTION_TL = ThreadLocal.withInitial(
+    private static final ThreadLocal<Queue<PendingAction>> UNORDERED_ACTION_TL =
+            ThreadLocal.withInitial(
             PriorityQueue::new);
     private static final AppConfig.WriteCommitPolicy WRITE_COMMIT_POLICY = Utils.getServerConfig()
             .getVfs()
@@ -85,7 +87,8 @@ public class WriteContextImpl implements WriteContext, StringBuilderFormattable 
     private boolean firstWrite = true;
     private long commitOffset = 0;
 
-    private WriteContextImpl(FileHandle fileHandle, DFSClient dfsClient, HdfsDataOutputStream out, WriteContextFactoryImpl factory) {
+    private WriteContextImpl(FileHandle fileHandle, DFSClient dfsClient, HdfsDataOutputStream out
+            , WriteContextFactoryImpl factory) {
         this.fileHandle = fileHandle;
         this.dfsClient = dfsClient;
         this.out = out;
@@ -93,7 +96,8 @@ public class WriteContextImpl implements WriteContext, StringBuilderFormattable 
         this.pendingActions = startWrite();
     }
 
-    public static WriteContextImpl get(FileHandle fileHandle, DFSClient dfsClient, HdfsDataOutputStream out, WriteContextFactoryImpl factory) {
+    public static WriteContextImpl get(FileHandle fileHandle, DFSClient dfsClient,
+                                       HdfsDataOutputStream out, WriteContextFactoryImpl factory) {
         return new WriteContextImpl(fileHandle, dfsClient, out, factory);
     }
 
@@ -223,7 +227,8 @@ public class WriteContextImpl implements WriteContext, StringBuilderFormattable 
             final int writeWaitTimeoutMs = config.getWriteWaitTimeoutMs();
             final boolean contextCloseOnFinalCommit = config.isContextCloseOnFinalCommit();
             final int commitIntervalMs = config.getCommitIntervalMs();
-            final boolean autoCommit = Utils.getServerConfig().getVfs().getWriteManager().isAutoCommit();
+            final boolean autoCommit =
+                    Utils.getServerConfig().getVfs().getWriteManager().isAutoCommit();
             final Gauge pendingWriteBytesGauge = WriteContextImpl.PENDING_WRITE_BYTES_GAUGE;
             final AtomicReference<PendingCommit> finalCommit = WriteContextImpl.this.finalCommit;
             final AtomicLong pendingWriteBytes = WriteContextImpl.this.pendingWriteBytes;
@@ -348,7 +353,8 @@ public class WriteContextImpl implements WriteContext, StringBuilderFormattable 
                     }
                 } else {
                     // 还有挂起的消息，异常
-                    LOG.error("{} wait timeout for {}ms, current pending actions are: {}", this, writeWaitTimeoutMs, pendingActions);
+                    LOG.error("{} wait timeout for {}ms, current pending actions are: {}", this,
+                            writeWaitTimeoutMs, pendingActions);
                     throw new TimeoutException("still has pending actions");
                 }
             } catch (Exception e) {
@@ -365,7 +371,8 @@ public class WriteContextImpl implements WriteContext, StringBuilderFormattable 
                 } finally {
                     PendingCommit pendingCommit = finalCommit.get();
                     if (pendingCommit != null) {
-                        pendingCommit.hook().completeExceptionally(new TimeoutException("file commit timeout"));
+                        pendingCommit.hook().completeExceptionally(new TimeoutException("file " +
+                                "commit timeout"));
                     }
                     cleanUp(pendingActions);
                     pendingActions.clear();
@@ -386,7 +393,8 @@ public class WriteContextImpl implements WriteContext, StringBuilderFormattable 
             for (PendingAction pendingAction : pendingActions) {
                 try {
                     if (pendingAction instanceof PendingCommit commit) {
-                        commit.hook().completeExceptionally(new TimeoutException("write context cleanup"));
+                        commit.hook().completeExceptionally(new TimeoutException("write context " +
+                                "cleanup"));
                     } else if (pendingAction instanceof PendingWrite write) {
                         PENDING_WRITE_BYTES_GAUGE.dec(write.count());
                         pendingWriteBytes.getAndAdd(-write.count());

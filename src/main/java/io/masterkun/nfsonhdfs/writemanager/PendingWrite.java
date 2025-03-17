@@ -5,7 +5,8 @@ import org.apache.hadoop.hdfs.DFSInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-sealed interface PendingWrite extends PendingAction permits ByteArrayPendingWrite, ByteBufferPendingWrite {
+sealed interface PendingWrite extends PendingAction permits ByteArrayPendingWrite,
+        ByteBufferPendingWrite {
     @Override
     default int self() {
         return 0;

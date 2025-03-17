@@ -5,7 +5,8 @@ import io.masterkun.nfsonhdfs.util.StringBuilderFormattable;
 import java.util.Base64;
 import java.util.Objects;
 
-public record FileHandle(long fileId, String principal, byte[] sessionId) implements StringBuilderFormattable {
+public record FileHandle(long fileId, String principal,
+                         byte[] sessionId) implements StringBuilderFormattable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

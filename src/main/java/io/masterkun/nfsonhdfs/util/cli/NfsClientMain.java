@@ -203,7 +203,8 @@ public class NfsClientMain {
                             HostAndPort hp = HostAndPort.fromString(host)
                                     .withDefaultPort(2049)
                                     .requireBracketsForIPv6();
-                            InetSocketAddress serverAddress = new InetSocketAddress(hp.getHost(), hp.getPort());
+                            InetSocketAddress serverAddress = new InetSocketAddress(hp.getHost(),
+                                    hp.getPort());
                             nfsClient = new NfsClientMain(serverAddress);
                             nfsClient.mount(root);
                             break;
@@ -308,7 +309,8 @@ public class NfsClientMain {
                                 System.out.println("usage: read <file> [-nopnfs]");
                                 continue;
                             }
-                            boolean usePNFS = commandArgs.length == 2 || !commandArgs[2].equals("-nopnfs");
+                            boolean usePNFS = commandArgs.length == 2 || !commandArgs[2].equals(
+                                    "-nopnfs");
                             nfsClient.read(commandArgs[1], usePNFS);
                             break;
                         }
@@ -376,7 +378,8 @@ public class NfsClientMain {
                                 System.out.println("usage: write <src> <dest> [-nopnfs]");
                                 continue;
                             }
-                            boolean usePNFS = commandArgs.length == 3 || !commandArgs[3].equals("-nopnfs");
+                            boolean usePNFS = commandArgs.length == 3 || !commandArgs[3].equals(
+                                    "-nopnfs");
                             nfsClient.write(commandArgs[1], commandArgs[2], usePNFS);
                             break;
                         }
@@ -554,8 +557,10 @@ public class NfsClientMain {
         COMPOUND4res compound4res = sendCompound(args);
 
         if (compound4res.resarray.get(0).opexchange_id.eir_resok4.eir_server_impl_id.length > 0) {
-            String serverId = compound4res.resarray.get(0).opexchange_id.eir_resok4.eir_server_impl_id[0].nii_name.toString();
-            nfstime4 buildTime = compound4res.resarray.get(0).opexchange_id.eir_resok4.eir_server_impl_id[0].nii_date;
+            String serverId =
+                    compound4res.resarray.get(0).opexchange_id.eir_resok4.eir_server_impl_id[0].nii_name.toString();
+            nfstime4 buildTime =
+                    compound4res.resarray.get(0).opexchange_id.eir_resok4.eir_server_impl_id[0].nii_date;
             System.out.println("Connected to: " + serverId + ", built at: "
                     + (buildTime.seconds > 0 ? new Date(buildTime.seconds * 1000) : "<Unknon>"));
         } else {
@@ -589,9 +594,11 @@ public class NfsClientMain {
 
         COMPOUND4res compound4res = sendCompound(args);
 
-        sessionid4 sessionid = compound4res.resarray.get(0).opcreate_session.csr_resok4.csr_sessionid;
+        sessionid4 sessionid =
+                compound4res.resarray.get(0).opcreate_session.csr_resok4.csr_sessionid;
         _sequenceID.value = 0;
-        int maxRequests = compound4res.resarray.get(0).opcreate_session.csr_resok4.csr_fore_chan_attrs.ca_maxrequests.value;
+        int maxRequests =
+                compound4res.resarray.get(0).opcreate_session.csr_resok4.csr_fore_chan_attrs.ca_maxrequests.value;
         System.out.println("Using slots: " + maxRequests);
         _clientSession = new ClientSession(sessionid, maxRequests);
         if (_isMDS) {
@@ -603,8 +610,10 @@ public class NfsClientMain {
 
             compound4res = sendCompoundInSession(args);
 
-            AttributeMap attributeMap = new AttributeMap(compound4res.resarray.get(compound4res.resarray.size() - 1).opgetattr.resok4.obj_attributes);
-            Optional<fattr4_lease_time> fattr4_lease_timeAttr = attributeMap.get(nfs4_prot.FATTR4_LEASE_TIME);
+            AttributeMap attributeMap =
+                    new AttributeMap(compound4res.resarray.get(compound4res.resarray.size() - 1).opgetattr.resok4.obj_attributes);
+            Optional<fattr4_lease_time> fattr4_lease_timeAttr =
+                    attributeMap.get(nfs4_prot.FATTR4_LEASE_TIME);
             int leaseTimeInSeconds = fattr4_lease_timeAttr.get().value;
             System.out.println("server lease time: " + leaseTimeInSeconds + " sec.");
             _executorService.scheduleAtFixedRate(new LeaseUpdater(this),
@@ -718,10 +727,12 @@ public class NfsClientMain {
 
             COMPOUND4res compound4res = sendCompoundInSession(args);
 
-            verifier = compound4res.resarray.get(compound4res.resarray.size() - 1).opreaddir.resok4.cookieverf;
+            verifier =
+                    compound4res.resarray.get(compound4res.resarray.size() - 1).opreaddir.resok4.cookieverf;
             done = compound4res.resarray.get(compound4res.resarray.size() - 1).opreaddir.resok4.reply.eof;
 
-            entry4 dirEntry = compound4res.resarray.get(compound4res.resarray.size() - 1).opreaddir.resok4.reply.entries;
+            entry4 dirEntry =
+                    compound4res.resarray.get(compound4res.resarray.size() - 1).opreaddir.resok4.reply.entries;
             while (dirEntry != null) {
                 cookie = dirEntry.cookie.value;
                 list.add(new String(dirEntry.name.value));
@@ -758,7 +769,8 @@ public class NfsClientMain {
 
         COMPOUND4res compound4res = sendCompoundInSession(args);
 
-        AttributeMap attrs = new AttributeMap(compound4res.resarray.get(compound4res.resarray.size() - 1).opgetattr.resok4.obj_attributes);
+        AttributeMap attrs =
+                new AttributeMap(compound4res.resarray.get(compound4res.resarray.size() - 1).opgetattr.resok4.obj_attributes);
 
         Optional<fattr4_fs_locations> locationsAttr = attrs.get(nfs4_prot.FATTR4_FS_LOCATIONS);
         if (locationsAttr.isPresent()) {
@@ -796,7 +808,8 @@ public class NfsClientMain {
                 .build();
         COMPOUND4res compound4res = sendCompoundInSession(args);
 
-        AttributeMap attrs = new AttributeMap(compound4res.resarray.get(2).opgetattr.resok4.obj_attributes);
+        AttributeMap attrs =
+                new AttributeMap(compound4res.resarray.get(2).opgetattr.resok4.obj_attributes);
 
         Optional<fattr4_size> size = attrs.get(nfs4_prot.FATTR4_SIZE);
         if (size.isPresent()) {
@@ -814,7 +827,8 @@ public class NfsClientMain {
         OpenReply or = open(path);
 
         if (pnfs && _isMDS) {
-            StripeMap stripeMap = layoutget(or.fh(), or.stateid(), layoutiomode4.LAYOUTIOMODE4_READ);
+            StripeMap stripeMap = layoutget(or.fh(), or.stateid(),
+                    layoutiomode4.LAYOUTIOMODE4_READ);
 
             List<Stripe> stripes = stripeMap.getStripe(0, 4096);
             Stripe stripe = stripes.get(0);
@@ -847,7 +861,8 @@ public class NfsClientMain {
         COMPOUND4args args = new CompoundBuilder()
                 .withPutfh(path.charAt(0) == '/' ? _rootFh : _cwd)
                 .withLookup(dirname(path))
-                .withOpen(basename(path), _sequenceID.value, _clientIdByServer, nfs4_prot.OPEN4_SHARE_ACCESS_READ)
+                .withOpen(basename(path), _sequenceID.value, _clientIdByServer,
+                        nfs4_prot.OPEN4_SHARE_ACCESS_READ)
                 .withRead(4096, 0, Stateids.currentStateId())
                 .withClose(Stateids.currentStateId(), 1)
                 .withTag("open+read+close")
@@ -927,7 +942,8 @@ public class NfsClientMain {
         COMPOUND4args args = new CompoundBuilder()
                 .withPutfh(path.charAt(0) == '/' ? _rootFh : _cwd)
                 .withLookup(dirname(path))
-                .withOpen(basename(path), _sequenceID.value, _clientIdByServer, nfs4_prot.OPEN4_SHARE_ACCESS_READ)
+                .withOpen(basename(path), _sequenceID.value, _clientIdByServer,
+                        nfs4_prot.OPEN4_SHARE_ACCESS_READ)
                 .withGetfh()
                 .withTag("open_read")
                 .build();
@@ -947,7 +963,8 @@ public class NfsClientMain {
         COMPOUND4args args = new CompoundBuilder()
                 .withPutfh(path.charAt(0) == '/' ? _rootFh : _cwd)
                 .withLookup(dirname(path))
-                .withOpenCreate(basename(path), _sequenceID.value, _clientIdByServer, nfs4_prot.OPEN4_SHARE_ACCESS_BOTH)
+                .withOpenCreate(basename(path), _sequenceID.value, _clientIdByServer,
+                        nfs4_prot.OPEN4_SHARE_ACCESS_BOTH)
                 .withGetfh()
                 .withTag("open_create")
                 .build();
@@ -988,7 +1005,8 @@ public class NfsClientMain {
         System.out.println("Layoutget for fh: " + BaseEncoding.base16().lowerCase().encode(fh.value));
         System.out.println("    roc   : " + compound4res.resarray.get(2).oplayoutget.logr_resok4.logr_return_on_close);
 
-        StripeMap stripeMap = new StripeMap(compound4res.resarray.get(2).oplayoutget.logr_resok4.logr_stateid);
+        StripeMap stripeMap =
+                new StripeMap(compound4res.resarray.get(2).oplayoutget.logr_resok4.logr_stateid);
 
         for (layout4 l : layout) {
             nfsv4_1_file_layout4 fileDevice = LayoutgetStub.decodeLayoutId(l.lo_content.loc_body);
@@ -1003,7 +1021,8 @@ public class NfsClientMain {
             System.out.println("    type  : " + l.lo_content.loc_type);
             System.out.println("    unit  : " + fileDevice.nfl_util.value);
             System.out.println("    commit: "
-                    + ((fileDevice.nfl_util.value & nfs4_prot.NFL4_UFLG_COMMIT_THRU_MDS) == 0 ? "ds" : "mds"));
+                    + ((fileDevice.nfl_util.value & nfs4_prot.NFL4_UFLG_COMMIT_THRU_MDS) == 0 ?
+                    "ds" : "mds"));
 
             deviceid4 deviceID = fileDevice.nfl_deviceid;
             Stripe stripe = new Stripe(deviceID, fileDevice.nfl_fh_list[0],
@@ -1048,7 +1067,8 @@ public class NfsClientMain {
 
         COMPOUND4args args = new CompoundBuilder()
                 .withPutfh(fh)
-                .withLayoutcommit(offset, len, false, stateid, newOffset, layouttype4.LAYOUT4_NFSV4_1_FILES, body)
+                .withLayoutcommit(offset, len, false, stateid, newOffset,
+                        layouttype4.LAYOUT4_NFSV4_1_FILES, body)
                 .withTag("layoutcommit")
                 .build();
 
@@ -1163,7 +1183,8 @@ public class NfsClientMain {
 
         COMPOUND4res compound4res = sendCompoundInSession(args);
 
-        AttributeMap attrs = new AttributeMap(compound4res.resarray.get(compound4res.resarray.size() - 1).opgetattr.resok4.obj_attributes);
+        AttributeMap attrs =
+                new AttributeMap(compound4res.resarray.get(compound4res.resarray.size() - 1).opgetattr.resok4.obj_attributes);
         Optional<fattr4_fs_layout_types> layoutTypes = attrs.get(nfs4_prot.FATTR4_FS_LAYOUT_TYPES);
 
         List<layouttype4> serverLayoutTypes = Arrays.stream(layoutTypes.get().value)
@@ -1182,7 +1203,8 @@ public class NfsClientMain {
                 .findAny()
                 .ifPresentOrElse(t -> System.out.println("Using layout type: " + t),
                         () -> {
-                            System.out.println("Layout type " + clientLayoutType + " not supported. Disabling pNFS");
+                            System.out.println("Layout type " + clientLayoutType + " not " +
+                                    "supported. Disabling pNFS");
                             _isMDS = false;
                         });
     }
@@ -1198,7 +1220,8 @@ public class NfsClientMain {
         try {
             COMPOUND4res compound4res = sendCompoundInSession(args);
 
-            deviceid4[] deviceList = compound4res.resarray.get(2).opgetdevicelist.gdlr_resok4.gdlr_deviceid_list;
+            deviceid4[] deviceList =
+                    compound4res.resarray.get(2).opgetdevicelist.gdlr_resok4.gdlr_deviceid_list;
 
             System.out.println("Know devices: ");
             for (deviceid4 device : deviceList) {
@@ -1321,7 +1344,8 @@ public class NfsClientMain {
 
         COMPOUND4res compound4res = sendCompoundInSession(args);
 
-        AttributeMap attrs = new AttributeMap(compound4res.resarray.get(compound4res.resarray.size() - 1).opgetattr.resok4.obj_attributes);
+        AttributeMap attrs =
+                new AttributeMap(compound4res.resarray.get(compound4res.resarray.size() - 1).opgetattr.resok4.obj_attributes);
 
         Optional<mode4> mode = attrs.get(nfs4_prot.FATTR4_MODE);
         if (mode.isPresent()) {

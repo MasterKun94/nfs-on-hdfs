@@ -1,9 +1,9 @@
 package io.masterkun.nfsonhdfs;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.sun.security.auth.UnixNumericUserPrincipal;
 import io.masterkun.nfsonhdfs.util.Utils;
 import io.masterkun.nfsonhdfs.vfs.FileHandle;
-import com.sun.security.auth.UnixNumericUserPrincipal;
 import org.dcache.nfs.v4.CompoundContext;
 
 import javax.security.auth.Subject;

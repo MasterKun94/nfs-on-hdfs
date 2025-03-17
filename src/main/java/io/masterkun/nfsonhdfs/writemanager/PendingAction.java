@@ -1,6 +1,7 @@
 package io.masterkun.nfsonhdfs.writemanager;
 
-sealed interface PendingAction extends Comparable<PendingAction> permits PendingCommit, PendingWrite {
+sealed interface PendingAction extends Comparable<PendingAction> permits PendingCommit,
+        PendingWrite {
     long offset();
 
     int count();

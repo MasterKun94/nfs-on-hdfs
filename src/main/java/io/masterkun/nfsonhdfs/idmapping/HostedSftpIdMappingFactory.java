@@ -18,7 +18,8 @@ public class HostedSftpIdMappingFactory {
     public HostedSftpIdMappingFactory(AbstractIdMapping innerMapping) {
         this.loader = k -> {
             AppConfig.SftpConfig sftp = Utils.getServerConfig().getSftp();
-            long reloadInterval = Utils.getServerConfig().getVfs().getIdMapping().getReloadInterval();
+            long reloadInterval =
+                    Utils.getServerConfig().getVfs().getIdMapping().getReloadInterval();
             for (AppConfig.SftpAddressInfo addressInfo : sftp.getAddressInfos()) {
                 WildcardConfigPatternMatcher matcher = new WildcardConfigPatternMatcher();
                 if (matcher.matches(addressInfo.getHost(), k)) {
@@ -43,7 +44,8 @@ public class HostedSftpIdMappingFactory {
                         reloadInterval
                 );
             } catch (Exception e) {
-                throw new IllegalArgumentException("IdMapping for address: " + k + " not found, fallback to LocalShellIdMapping");
+                throw new IllegalArgumentException("IdMapping for address: " + k + " not found, " +
+                        "fallback to LocalShellIdMapping");
             }
         };
     }

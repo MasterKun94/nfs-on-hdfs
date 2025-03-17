@@ -23,7 +23,8 @@ public final class DirectByteBufferPool extends AbstractBufferPool {
     @Override
     public void give(ByteBuffer buffer) {
         if (!buffer.isDirect()) {
-            throw new IllegalArgumentException("A non-direct ByteBuffer cannot be given to a DirectByteBufferPool!");
+            throw new IllegalArgumentException("A non-direct ByteBuffer cannot be given to a " +
+                    "DirectByteBufferPool!");
         }
         super.give(buffer);
     }

@@ -99,7 +99,8 @@ public class ThreadExports extends Collector {
                 sampleFamilies.add(
                         new GaugeMetricFamily(
                                 JVM_THREADS_DEADLOCKED,
-                                "Cycles of JVM-threads that are in deadlock waiting to acquire object monitors or ownable synchronizers",
+                                "Cycles of JVM-threads that are in deadlock waiting to acquire " +
+                                        "object monitors or ownable synchronizers",
                                 nullSafeArrayLength(threadBean.findDeadlockedThreads())));
             }
 
@@ -107,7 +108,8 @@ public class ThreadExports extends Collector {
                 sampleFamilies.add(
                         new GaugeMetricFamily(
                                 JVM_THREADS_DEADLOCKED_MONITOR,
-                                "Cycles of JVM-threads that are in deadlock waiting to acquire object monitors",
+                                "Cycles of JVM-threads that are in deadlock waiting to acquire " +
+                                        "object monitors",
                                 nullSafeArrayLength(threadBean.findMonitorDeadlockedThreads())));
             }
 

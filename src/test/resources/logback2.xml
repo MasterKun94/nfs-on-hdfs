@@ -27,7 +27,7 @@
     </appender>
 
     <root level="${log.level:-info}">
-        <appender-ref ref="file" />
+        <appender-ref ref="file"/>
     </root>
 
 </configuration>

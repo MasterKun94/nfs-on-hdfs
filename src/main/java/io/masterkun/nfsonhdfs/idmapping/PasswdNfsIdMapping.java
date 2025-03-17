@@ -19,7 +19,8 @@ public class PasswdNfsIdMapping extends AbstractIdMapping {
     }
 
     @Override
-    protected void doReload(BiMap<String, Integer> userUidMap, BiMap<String, Integer> groupGidMap) throws Exception {
+    protected void doReload(BiMap<String, Integer> userUidMap,
+                            BiMap<String, Integer> groupGidMap) throws Exception {
         InputStream passwd = getClass().getClassLoader().getResourceAsStream("passwd");
         if (passwd == null) {
             throw new IOException("passwd resource not found");

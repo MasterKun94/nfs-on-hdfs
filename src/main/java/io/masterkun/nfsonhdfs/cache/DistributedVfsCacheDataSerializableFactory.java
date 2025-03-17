@@ -6,7 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DistributedVfsCacheDataSerializableFactory implements DataSerializableFactory {
-    private static final Logger LOG = LoggerFactory.getLogger(DistributedVfsCacheDataSerializableFactory.class);
+    private static final Logger LOG =
+            LoggerFactory.getLogger(DistributedVfsCacheDataSerializableFactory.class);
 
     public DistributedVfsCacheDataSerializableFactory() {
         LOG.info("Init DistributedVfsCacheDataSerializableFactory");

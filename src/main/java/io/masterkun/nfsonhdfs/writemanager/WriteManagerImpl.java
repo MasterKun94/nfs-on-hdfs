@@ -18,7 +18,8 @@ public class WriteManagerImpl implements WriteManager {
 
     public WriteManagerImpl(DfsClientCache dfsClientCache) {
         this.dfsClientCache = dfsClientCache;
-        AppConfig.WriteManagerConfig writeManager = Utils.getServerConfig().getVfs().getWriteManager();
+        AppConfig.WriteManagerConfig writeManager =
+                Utils.getServerConfig().getVfs().getWriteManager();
         this.writeHighWatermark = writeManager.getWriteHighWatermark();
         this.writeLowWatermark = writeManager.getWriteLowWatermark();
     }

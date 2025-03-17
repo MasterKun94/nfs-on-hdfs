@@ -22,12 +22,12 @@ package io.masterkun.nfsonhdfs;
 import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
 import com.google.common.primitives.Longs;
+import com.sun.security.auth.UnixNumericGroupPrincipal;
+import com.sun.security.auth.UnixNumericUserPrincipal;
 import io.masterkun.nfsonhdfs.cache.CacheKey;
 import io.masterkun.nfsonhdfs.cache.CacheLoaderHelper;
 import io.masterkun.nfsonhdfs.cache.StatHolder;
 import io.masterkun.nfsonhdfs.util.Utils;
-import com.sun.security.auth.UnixNumericGroupPrincipal;
-import com.sun.security.auth.UnixNumericUserPrincipal;
 import org.dcache.nfs.status.ExistException;
 import org.dcache.nfs.status.NoEntException;
 import org.dcache.nfs.status.NotEmptyException;
@@ -82,7 +82,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
 /**
- * Stolen from https://github.com/kofemann/simple-nfs/blob/master/src/main/java/org/dcache/simplenfs/LocalFileSystem.java
+ * Stolen from
+ * https://github.com/kofemann/simple-nfs/blob/master/src/main/java/org/dcache/simplenfs
+ * /LocalFileSystem.java
  */
 public class DummyVFS implements VirtualFileSystem, CacheLoaderHelper {
 
@@ -387,7 +389,8 @@ public class DummyVFS implements VirtualFileSystem, CacheLoaderHelper {
                 cookie++;
                 if (cookie > l) {
                     long ino = resolvePath(p);
-                    list.add(new DirectoryEntry(p.getFileName().toString(), toFileHandle(ino), statPath(p, ino), cookie));
+                    list.add(new DirectoryEntry(p.getFileName().toString(), toFileHandle(ino),
+                            statPath(p, ino), cookie));
                 }
             }
         }
@@ -522,7 +525,8 @@ public class DummyVFS implements VirtualFileSystem, CacheLoaderHelper {
     }
 
     @Override
-    public Inode symlink(Inode parent, String linkName, String targetName, Subject subject, int mode) throws IOException {
+    public Inode symlink(Inode parent, String linkName, String targetName, Subject subject,
+                         int mode) throws IOException {
         long parentInodeNumber = toInodeNumber(parent);
         Path parentPath = resolveInode(parentInodeNumber);
         Path link = parentPath.resolve(linkName);
@@ -550,7 +554,8 @@ public class DummyVFS implements VirtualFileSystem, CacheLoaderHelper {
     }
 
     @Override
-    public WriteResult write(Inode inode, byte[] data, long offset, int count, StabilityLevel stabilityLevel) throws IOException {
+    public WriteResult write(Inode inode, byte[] data, long offset, int count,
+                             StabilityLevel stabilityLevel) throws IOException {
         long inodeNumber = toInodeNumber(inode);
         Path path = resolveInode(inodeNumber);
         ByteBuffer srcBuffer = ByteBuffer.wrap(data, 0, count);
@@ -569,7 +574,8 @@ public class DummyVFS implements VirtualFileSystem, CacheLoaderHelper {
 
         Class<? extends BasicFileAttributeView> attributeClass = PosixFileAttributeView.class;
 
-        BasicFileAttributes attrs = Files.getFileAttributeView(p, attributeClass, NOFOLLOW_LINKS).readAttributes();
+        BasicFileAttributes attrs =
+                Files.getFileAttributeView(p, attributeClass, NOFOLLOW_LINKS).readAttributes();
 
         Stat stat = new Stat();
 
@@ -577,10 +583,13 @@ public class DummyVFS implements VirtualFileSystem, CacheLoaderHelper {
         stat.setCTime(attrs.creationTime().toMillis());
         stat.setMTime(attrs.lastModifiedTime().toMillis());
 
-        stat.setGid(Integer.parseInt(((Principal) Files.getAttribute(p, "posix:group", NOFOLLOW_LINKS)).getName()));
-        stat.setUid(Integer.parseInt(((Principal) Files.getAttribute(p, "owner:owner", NOFOLLOW_LINKS)).getName()));
+        stat.setGid(Integer.parseInt(((Principal) Files.getAttribute(p, "posix:group",
+                NOFOLLOW_LINKS)).getName()));
+        stat.setUid(Integer.parseInt(((Principal) Files.getAttribute(p, "owner:owner",
+                NOFOLLOW_LINKS)).getName()));
 
-        Set<PosixFilePermission> permissions = (Set<PosixFilePermission>) Files.getAttribute(p, "posix:permissions", NOFOLLOW_LINKS);
+        Set<PosixFilePermission> permissions = (Set<PosixFilePermission>) Files.getAttribute(p,
+                "posix:permissions", NOFOLLOW_LINKS);
         stat.setMode(permissionsToMode(permissions, attrs));
 //        stat.setNlink((Integer) Files.getAttribute(p, "nlink", NOFOLLOW_LINKS));
         stat.setDev(17);
@@ -610,7 +619,8 @@ public class DummyVFS implements VirtualFileSystem, CacheLoaderHelper {
 
         long inodeNumber = toInodeNumber(inode);
         Path path = resolveInode(inodeNumber);
-        PosixFileAttributeView attributeView = Files.getFileAttributeView(path, PosixFileAttributeView.class, NOFOLLOW_LINKS);
+        PosixFileAttributeView attributeView = Files.getFileAttributeView(path,
+                PosixFileAttributeView.class, NOFOLLOW_LINKS);
         if (stat.isDefined(Stat.StatAttribute.OWNER)) {
             try {
                 String uid = String.valueOf(stat.getUid());
@@ -631,9 +641,11 @@ public class DummyVFS implements VirtualFileSystem, CacheLoaderHelper {
         }
         if (stat.isDefined(Stat.StatAttribute.MODE)) {
             try {
-                Files.setAttribute(path, "posix:permissions", modeToPermissions(stat.getMode()), NOFOLLOW_LINKS);
+                Files.setAttribute(path, "posix:permissions", modeToPermissions(stat.getMode()),
+                        NOFOLLOW_LINKS);
             } catch (IOException e) {
-                throw new UnsupportedOperationException("set mode unsupported: " + e.getMessage(), e);
+                throw new UnsupportedOperationException("set mode unsupported: " + e.getMessage()
+                        , e);
             }
         }
         if (stat.isDefined(Stat.StatAttribute.SIZE)) {
